@@ -1,0 +1,39 @@
+# GET ALL TODOS
+GET http://localhost:3000/todos
+
+###
+# CREATE TODO
+POST http://localhost:3000/todos
+Content-Type: application/json
+
+{
+  "title": "Create POST in TODO App",
+  "description": "Membuat API Post Pada Todos app untuk menambahkan todo list"
+}
+
+###
+# UPDATE TODO using PUT
+PUT http://localhost:3000/todos/1
+Content-Type: application/json
+
+{
+  "title": "Create PUT in TODO App",
+  "description": "Mengubah todo tentang post menjadi PUT pada TODO App"
+}
+
+###
+# UPDATE TODO using PATCH
+PATCH http://localhost:3000/todos/1
+Content-Type: application/json
+
+{
+  "status": "in_progress"
+}
+
+###
+# DELETE TODO
+DELETE http://localhost:3000/todos/1
+
+###
+# GET TODO
+GET http://localhost:3000/todos/1
