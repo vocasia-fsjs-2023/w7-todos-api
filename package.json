@@ -2,5 +2,23 @@
   "dependencies": {
     "body-parser": "^1.20.2",
     "express": "^4.18.2"
-  }
+  },
+  "name": "w7-todos-api",
+  "description": "Buatlah sebuah server untuk dapat melakukan penyimpanan dan perubahan data dari aplikasi yang kalian buat,",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vocasia-fsjs-2023/w7-todos-api.git"
+  },
+  "author": "Uti Tiyanum",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vocasia-fsjs-2023/w7-todos-api/issues"
+  },
+  "homepage": "https://github.com/vocasia-fsjs-2023/w7-todos-api#readme"
 }
