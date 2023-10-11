@@ -1,72 +1,66 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+const express = require("express");
 const app = express();
 const port = 3000;
 
-app.use(bodyParser.json());
+app.use(express.json());
 
-const todos = [];
+// Data sementara (gunakan database di produksi)
+let items = [{ id: 1, title: "Data 1", description: "First Todos" }];
 
-// Create 
-app.post('/todos', (req, res) => {
-  const newTodo = req.body;
-  const currentDate = new Date().toISOString().split('T')[0];
-  newTodo.id = todos.length + 1;
-  newTodo.status = 'created';
-  newTodo.created_at = currentDate;
-  newTodo.updated_at = currentDate;
-  todos.push(newTodo);
-  res.status(201).json(newTodo);
+// Operasi CRUD
+
+// Get all items
+app.get("/api/items", (req, res) => {
+  res.json(items);
 });
 
-// Route untuk mendapatkan semua todo
-app.get('/todos', (req, res) => {
-  res.status(200).json({ todos });
+// Get a specific item by ID
+app.get("/api/items/:id", (req, res) => {
+  const itemId = parseInt(req.params.id);
+  const item = items.find((i) => i.id === itemId);
+
+  if (!item) {
+    return res.status(404).json({ error: "Item not found" });
+  }
+
+  res.json(item);
 });
 
-// Route untuk mengedit todo berdasarkan ID
-app.put('/todos/:id', (req, res) => {
-  const todoId = parseInt(req.params.id);
-  const updatedTodo = req.body;
-  const todoIndex = todos.findIndex((todo) => todo.id === todoId);
-  if (todoIndex !== -1) {
-    updatedTodo.id = todoId;
-    updatedTodo.status = 'created';
-    updatedTodo.created_at = todos[todoIndex].created_at;
-    updatedTodo.updated_at = new Date().toISOString().split('T')[0];
-    todos[todoIndex] = updatedTodo;
-    res.status(200).json(updatedTodo);
+// Create a new item
+app.post("/api/items", (req, res) => {
+  const newItem = {
+    id: items.length + 1,
+    title: req.body.title,
+    description: req.body.description,
+  };
+
+  items.push(newItem);
+  res.json(newItem);
+});
+
+// Update an item by ID
+app.put("/api/items/:id", (req, res) => {
+  const itemId = parseInt(req.params.id);
+  const item = items.find((i) => i.id === itemId);
+
+  if (!item) {
+    return res.status(404).json({ error: "Item not found" });
   } else {
-    res.status(404).json({ error: 'Todo tidak ditemukan' });
+    item.title = req.body.title;
+    item.description = req.body.description;
+    res.json(item);
+    return res.status(200).json({ message: "updated" });
   }
 });
 
-// Update
-app.patch('/todos/:id', (req, res) => {
-  const todoId = parseInt(req.params.id);
-  const { status } = req.body;
-  const todoIndex = todos.findIndex((todo) => todo.id === todoId);
-  if (todoIndex !== -1) {
-    todos[todoIndex].status = status;
-    todos[todoIndex].updated_at = new Date().toISOString().split('T')[0];
-    res.status(200).json(todos[todoIndex]);
-  } else {
-    res.status(404).json({ error: 'Todo tidak ditemukan' });
-  }
-});
+// Delete an item by ID
+app.delete("/api/items/:id", (req, res) => {
+  const itemId = parseInt(req.params.id);
+  items = items.filter((i) => i.id !== itemId);
 
-// Delete
-app.delete('/todos/:id', (req, res) => {
-  const todoId = parseInt(req.params.id);
-  const todoIndex = todos.findIndex((todo) => todo.id === todoId);
-  if (todoIndex !== -1) {
-    const deletedTodo = todos.splice(todoIndex, 1);
-    res.status(200).json({ message: `Todo dengan ID ${todoId} berhasil dihapus`, deletedTodo: deletedTodo[0] });
-  } else {
-    res.status(404).json({ error: 'Todo tidak ditemukan' });
-  }
+  res.json({ message: "Item deleted successfully" });
 });
 
 app.listen(port, () => {
-  console.log(`Server berjalan di port ${port}`);
+    console.log(`Server berjalan di http://localhost:${port}`);
 });
